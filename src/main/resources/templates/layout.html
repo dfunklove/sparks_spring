@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <title>Layout page</title>
+</head>
+<body>
+  <header>
+    <h1>Sparks for Success</h1>
+  </header>
+  <p th:if="${message != null}">
+    Error: [[${message}]]
+  </p>
+  <section layout:fragment="content">
+    <p>Page content goes here</p>
+  </section>
+  <footer>
+    <p>My footer</p>
+  </footer>  
+</body>
+</html>

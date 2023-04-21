@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <title>Students</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+  <section layout:fragment="content">
+    <h2>Students</h2>
+  <div th:if="${students != null && students.size() > 0}">
+      <table class="table table-hover table-responsive-xl">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">School ID</th>
+            <th scope="col">School Name</th>
+            <th scope="col">Goal</th>
+            <th scope="col">Goal</th>
+            <th scope="col">Goal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="student : ${students}">
+            <th scope="row">[[${student.id}]]</th>
+            <td>[[${student.firstName}]]</td>
+            <td>[[${student.lastName}]]</td>
+            <td>[[${student.school.id}]]</td>
+            <td>[[${student.school.name}]]</td>
+            <td th:each="goal : ${student.goals}">[[${goal.name}]]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="" th:unless="${students != null && students.size() > 0}">
+      <span>No students found!</span>
+    </div>
+  </section>
+</body>
+
+</html>

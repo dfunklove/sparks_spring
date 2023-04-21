@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <title>lessons</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+  <section layout:fragment="content">
+    <h2>Lessons</h2>
+  <div th:if="${lessons != null && lessons.size() > 0}">
+      <table class="table table-hover table-responsive-xl">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Notes</th>
+            <th scope="col">School ID</th>
+            <th scope="col">School Name</th>
+            <th scope="col">Student ID</th>
+            <th scope="col">Student Name</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="lesson : ${lessons}">
+            <th scope="row">[[${lesson.id}]]</th>
+            <td>[[${lesson.notes}]]</td>
+            <td>[[${lesson.school.id}]]</td>
+            <td>[[${lesson.school.name}]]</td>
+            <td>[[${lesson.student.id}]]</td>
+            <td>[[${lesson.student.firstName + " " + lesson.student.lastName}]]</td>
+            <td th:each="rating : ${lesson.ratings}">[[${rating.score}]]</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="" th:unless="${lessons != null && lessons.size() > 0}">
+      <span>No lessons found!</span>
+    </div>
+  </section>
+</body>
+
+</html>
