@@ -1,41 +1,153 @@
-.navbar {
-  padding: 0 10px;
-}
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
 
-*.icon-dark {
-  color: grey;
-}
-
-.message {
-  position: absolute;
-  top: 40px;
-  right:5px;
-}
-
-.search {
-  position: relative;
-}
-
-.search input {
-  text-indent: 25px;
-  border: 2px solid #d6d4d4;
-}
-
-.search input:focus {
-  box-shadow: none;
-  border: 1px solid grey;
-}
-
-.search .fa-search {
-  position: absolute;
-  top: 12px;
-  left: 10px;
-}
-
-.search button {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 80px;
-  background: grey;
-}
+ body { font-family: sans-serif; }
+ label { margin-top: 10px; }
+ 
+ 
+ .all-block * { display:block; }
+ .all-inline * { display:inline; }
+ .btn { margin: 10px; }
+ .center-contents { text-align:center !important; }
+ .center-contents * { margin:auto; }
+ .group-lesson-row { display: none }
+ .hidden { display:none !important; }
+ .ul { list-style: none; }
+ .minimize { padding: 0px; margin: 0px; }
+ .slider { display:inline; }
+ .radio-nolabel { display:inline; }
+ .radio-withlabel * { display:inline; }
+ .radio-label-inline { display:inline-block; vertical-align:top; font-size: 0.875em; }
+ .radio-button-vertical { display:block; }
+ .radio-label-vertical  { display:block; font-size: 0.875em; }
+ .radio-withlabel-vertical { display:inline-block; }
+ .checkbox-withlabel * { display:inline; }
+ 
+ /* display form as table */
+ .table { display:table; border-collapse: separate; border-spacing: 5px;}
+ .thead { display:table-header-group; font-weight: bold; text-align: center }
+ .tr { display:table-row; }
+ .td { display:table-cell; vertical-align: middle; }
+ 
+ .table .lesson-fields { display:table-row; }
+ .table .lesson-fields label { display:none }
+ .table .lesson-field { display:table-cell; vertical-align: middle; margin: 1px }
+ 
+ @media 
+ only screen and (max-width: 760px) {
+ 
+   /* Force table to not be like tables anymore */
+   .table.responsive, .thead.responsive, .tbody.responsive, .th.responsive, .td.responsive, .tr.responsive { 
+     display: block; 
+   }
+   
+   /* Hide table headers (but not display: none;, for accessibility) */
+   .thead.responsive .tr.responsive { 
+     position: absolute;
+     top: -9999px;
+     left: -9999px;
+   }
+   
+   .table.responsive .lesson-fields { display:block; border-bottom: 1px solid; border: #000000}
+   .table.responsive .lesson-fields label { display:block; }
+   .table.responsive .lesson-field { display:block; }
+   .table.responsive .lesson-field.student-name { font-size: larger; }
+ }
+ 
+ .lessons-checkout .lesson-field.student-first-name, .lessons-checkout .lesson-field.student-last-name { 
+   display: inline-block; 
+   font-size: 1.5em; 
+   font-weight: bold; 
+   position: relative; 
+   /*top: -1.5em; */
+ }
+ .lessons-checkout .lesson-field.student-first-name::after {
+   content: " ";
+   white-space: pre;
+ }
+ .lessons-checkout .lesson-field.student-last-name::after {
+   content: " . Check Out"
+ }
+ .lessons-checkout .lesson-field.school,
+   .lessons-checkout .lesson-field.student-first-name,
+   .lessons-checkout .lesson-field.student-last-name { 
+     display: none; 
+ }
+ .lessons-checkout .lesson-field.notes * { width: 100%; }
+ /*.lessons-checkout .time-in { position: relative; top: 2.5em; }*/
+ 
+ .courses span.td { padding: 0.125em }
+ .rating { display:flex }
+ .rating .goal { flex: 2 0.5 75%; }
+ .rating .score { flex: 0.5 2 content; }
+ 
+ 
+ div.stdnt {
+   border-collapse: collapse;
+ }
+ .stdnt .td {
+   border: 1px solid black;
+   padding: 1px;
+   vertical-align: middle;
+ }
+ 
+ .table button {
+   margin-bottom: 0; /* override style from pico.css */
+ }
+ 
+ table.stdnt {
+   border-collapse: collapse;
+ }
+ .stdnt .no-border-left, .no-border-left { 
+   border-left:0px;
+   border-top:0px;
+   border-bottom:0px;
+ }
+ table.stdnt td, th {
+   border: 1px solid black;
+ }
+ table.stdnt th {
+ border: 1px solid black;
+ padding-left: 0.5em;
+   padding-right: 0.5em;
+ }
+ table.noborder td, th { 
+   border: 0px;
+   padding: 0px;
+ }
+ textarea.notes {
+   width: 100%;
+   box-sizing: border-box;
+ }
+ 
+ ul.student_list { 
+   list-style:none;
+   padding-inline-start:0;
+ }
+ 
+ /* admin table entries */
+ .sideways { writing-mode: vertical-rl; text-orientation: mixed; }
+ .delete { width: 7em; margin: 0px; padding: 0px; text-align: center }
+ .welcome { width: 6em; margin: 0px; padding: 0px; text-align: center }
+ .hours { width: 5em; margin: 0px; padding: 0px; text-align: center }
+ .email { width: 9em; margin: 0px; padding: 0px }
+ .fname { width: 5em }
+ .lname { width: 5em }
+ .date { width: auto }
+ .timein{ width: auto }
+ .cent { text-align: center; width: 3em }
+ .updatetab { width: 8em; margin: 0px; padding: 0px; text-align: center }
+ 
