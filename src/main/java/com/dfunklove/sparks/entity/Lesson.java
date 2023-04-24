@@ -11,29 +11,36 @@ import lombok.Data;
 public class Lesson {
 
   @Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(generator = "lesson_generator")
+	@SequenceGenerator(name="lesson_generator", sequenceName = "lessons_id_seq", allocationSize = 1)
+	private int id;
 
-  @Column(nullable = false)
+  @Column
 	private String notes;
-
-	protected Lesson() {}
-
-	public Lesson(String notes) {
-		this.notes = notes;
-	}
 
 	@OneToMany
 	@JoinColumn(name="lesson_id")
 	private Set<Rating> ratings; 
 
 	@ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "school_id")
+  @JoinColumn(name = "school_id", nullable = false)
   private School school;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "student_id")
+  @JoinColumn(name = "student_id", nullable = false)
   private Student student;
+
+	@Column(name="time_in", nullable = false)
+	private java.time.LocalDateTime timeIn;
+
+	@Column(name="user_id", nullable = false)
+	private int userId;
+
+	public Lesson() {}
+
+	public Lesson(String notes) {
+		this.notes = notes;
+	}
 
 	public String toString() {
 		return String.format("Lesson[id=%d, notes=%s]", id, notes);

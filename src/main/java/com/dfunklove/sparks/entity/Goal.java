@@ -9,13 +9,18 @@ import lombok.Data;
 public class Goal {
 
   @Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(generator = "goal_generator")
+	@SequenceGenerator(name="goal_generator", sequenceName = "goals_id_seq", allocationSize = 1)
+	private int id;
 
   @Column(nullable = false)
 	private String name;
 
-	protected Goal() {}
+	public Goal() {}
+
+	public Goal(int id) {
+		this.id = id;
+	}
 
 	public Goal(String name) {
 		this.name = name;

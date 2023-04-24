@@ -11,8 +11,9 @@ import lombok.Data;
 @Table(name = "students")
 public class Student {
   @Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(generator = "school_generator")
+	@SequenceGenerator(name="school_generator", sequenceName = "schools_id_seq", allocationSize = 1)
+	private int id;
 
   @Column(nullable = false)
 	private String firstName;
@@ -31,6 +32,10 @@ public class Student {
   private School school;
 
   public Student() {}
+
+  public Student(int id) {
+    this.id = id;
+  }
 
   public Student(String firstName, String lastName, School school) {
 		this.firstName = firstName;

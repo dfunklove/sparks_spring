@@ -11,22 +11,24 @@ import lombok.Data;
 public class Rating {
 
   @Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(generator = "rating_generator")
+	@SequenceGenerator(name="rating_generator", sequenceName = "ratings_id_seq", allocationSize = 1)
+	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "goal_id", nullable = false)
   private Goal goal;
 
-	private Long lesson_id;
+	@Column(name="lesson_id")
+	private int lessonId;
 
   @Column(nullable = false)
 	private int score;
 
-	protected Rating() {}
+	public Rating() {}
 
-	public Rating(int score) {
-		this.score = score;
+	public Rating(int id) {
+		this.id = id;
 	}
 	
 	public String toString() {
