@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,7 +51,6 @@ public class LessonController {
     Lesson lesson = new Lesson();
 
     model.addAttribute("lesson", lesson);
-    model.addAttribute("pageTitle", "Create new Lesson");
 
     try {
       List<Student> students = new ArrayList<Student>();
@@ -61,6 +61,13 @@ public class LessonController {
     }
 
     return "lessons_new";
+  }
+
+  @GetMapping("/lessons/{id}/checkout")
+  public String checkout(Model model, @PathVariable(value="id") int id) {
+    Lesson lesson = lessonRepo.findById(id);
+    model.addAttribute("lesson", lesson);
+    return "lessons_checkout";
   }
 
   @PostMapping("/lessons")
@@ -77,6 +84,6 @@ public class LessonController {
       redirectAttributes.addAttribute("message", e.getMessage());
     }
 
-    return "redirect:/lessons";
+    return "redirect:/lessons/"+lesson.getId()+"/checkout";
   }
 }
