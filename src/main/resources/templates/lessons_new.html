@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0" />
+  <title>lessons</title>
+
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+  <section layout:fragment="content">
+    <div th:if="${students != null && students.size() > 0}">
+      <div class="table">
+        <div class="thead">
+          <div class="tr">
+            <span class="td">F Name</span>
+            <span class="td">L Name</span>
+            <span class="td">School</span>
+            <span class="td"></span>
+          </div>
+        </div>
+        <form class="tr" th:action="@{/lessons}" method="post" enctype="multipart/form-data" th:object="${lesson}" th:each="student : ${students}">
+          <input type="hidden" name="studentId" th:value="${student.id}" />
+          <input type="hidden" name="schoolId" th:value="${student.school.id}" />
+          <span class="td">[[${student.firstName}]]</span>
+          <span class="td">[[${student.lastName}]]</span>
+          <span class="td">[[${student.school.name}]]</span>
+          <span class="td"><button type="submit">Start Lesson</button></span>
+        </form>
+      </div>
+    </div>
+
+    <div th:unless="${students != null && students.size() > 0}">
+      <span>No students found!</span>
+    </div>
+  </section>
+</body>
+</html>
