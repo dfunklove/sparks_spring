@@ -1,7 +1,5 @@
 package com.dfunklove.sparks.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 import lombok.Data;
 
