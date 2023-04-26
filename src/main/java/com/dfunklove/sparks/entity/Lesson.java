@@ -33,6 +33,9 @@ public class Lesson {
 	@Column(name="time_in", nullable = false)
 	private java.time.LocalDateTime timeIn;
 
+	@Column(name="time_out")
+	private java.time.LocalDateTime timeOut;
+
 	@Column(name="user_id", nullable = false)
 	private int userId;
 
