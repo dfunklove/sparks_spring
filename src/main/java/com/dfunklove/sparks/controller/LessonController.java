@@ -3,6 +3,7 @@ package com.dfunklove.sparks.controller;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.dfunklove.sparks.SparksApplication;
+import com.dfunklove.sparks.entity.Goal;
 import com.dfunklove.sparks.entity.Lesson;
 import com.dfunklove.sparks.entity.Rating;
 import com.dfunklove.sparks.entity.School;
 import com.dfunklove.sparks.entity.Student;
+import com.dfunklove.sparks.repository.GoalRepository;
 import com.dfunklove.sparks.repository.LessonRepository;
 import com.dfunklove.sparks.repository.StudentRepository;
 
@@ -27,10 +31,11 @@ import com.dfunklove.sparks.repository.StudentRepository;
 public class LessonController {
 
   @Autowired
+  private GoalRepository goalRepo;
+  @Autowired
   private LessonRepository lessonRepo;
   @Autowired
   private StudentRepository studentRepo;
-
 
   @GetMapping("/lessons")
   public String getAll(Model model) {
@@ -66,7 +71,15 @@ public class LessonController {
   @GetMapping("/lessons/{id}/checkout")
   public String checkout(Model model, @PathVariable(value="id") int id) {
     Lesson lesson = lessonRepo.findById(id);
+    Set<Goal> sg = lesson.getStudent().getGoals();
+    while (sg.size() < SparksApplication.MAX_GOALS_PER_STUDENT) {
+      sg.add(new Goal());
+    }
+    List<Goal> goals = goalRepo.findAll();
+    int[] ratingScale = new int[]{10,9,8,7,6,5,4,3,2,1};
+    model.addAttribute("goals", goals);
     model.addAttribute("lesson", lesson);
+    model.addAttribute("ratingScale", ratingScale);
     return "lessons_checkout";
   }
 
@@ -77,6 +90,20 @@ public class LessonController {
       lesson.setSchool(new School(schoolId));
       lesson.setUserId(1);
       lesson.setTimeIn(LocalDateTime.now());
+      lessonRepo.save(lesson);
+
+      redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
+    } catch (Exception e) {
+      redirectAttributes.addAttribute("message", e.getMessage());
+    }
+
+    return "redirect:/lessons/"+lesson.getId()+"/checkout";
+  }
+
+  @PostMapping("/lessons/{id}")
+  public String updateLesson(Lesson lesson, RedirectAttributes redirectAttributes) {
+    try {
+      lesson.setTimeOut(LocalDateTime.now());
       lessonRepo.save(lesson);
 
       redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
