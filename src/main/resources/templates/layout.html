@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Layout page</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/pico.min.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+  <title>Sparks Spring</title>
 </head>
 <body>
-  <header>
-    <h1>Sparks for Success</h1>
-  </header>
-  <p th:if="${message != null}">
-    Error: [[${message}]]
-  </p>
-  <section layout:fragment="content">
-    <p>Page content goes here</p>
-  </section>
-  <footer>
-    <p>My footer</p>
-  </footer>  
+  <div id="root">
+    <nav class="container-fluid">
+      <ul><li><b><a href="/">Sparks for Success</a></b></li></ul>
+      <ul>
+        <li><a href="lessons/new">Single Lesson</a></li>
+        <li><a href="group_lessons/new">Group Lesson</a></li>
+        <li><a href="lessons">My Lessons</a></li>
+      </ul>
+    </nav>
+    <main id="detail" class="container">
+      <p th:if="${message != null}">
+        Error: [[${message}]]
+      </p>
+      <section layout:fragment="content">
+        <p>Page content goes here</p>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
