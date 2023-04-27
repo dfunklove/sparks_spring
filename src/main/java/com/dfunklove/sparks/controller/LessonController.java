@@ -2,11 +2,12 @@ package com.dfunklove.sparks.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dfunklove.sparks.SparksApplication;
@@ -25,6 +27,7 @@ import com.dfunklove.sparks.entity.School;
 import com.dfunklove.sparks.entity.Student;
 import com.dfunklove.sparks.repository.GoalRepository;
 import com.dfunklove.sparks.repository.LessonRepository;
+import com.dfunklove.sparks.repository.RatingRepository;
 import com.dfunklove.sparks.repository.StudentRepository;
 
 @Controller
@@ -34,6 +37,8 @@ public class LessonController {
   private GoalRepository goalRepo;
   @Autowired
   private LessonRepository lessonRepo;
+  @Autowired
+  private RatingRepository ratingRepo;
   @Autowired
   private StudentRepository studentRepo;
 
@@ -71,7 +76,7 @@ public class LessonController {
   @GetMapping("/lessons/{id}/checkout")
   public String checkout(Model model, @PathVariable(value="id") int id) {
     Lesson lesson = lessonRepo.findById(id);
-    Set<Goal> sg = lesson.getStudent().getGoals();
+    List<Goal> sg = new ArrayList<Goal>(lesson.getStudent().getGoals());
     while (sg.size() < SparksApplication.MAX_GOALS_PER_STUDENT) {
       sg.add(new Goal());
     }
@@ -80,6 +85,7 @@ public class LessonController {
     model.addAttribute("goals", goals);
     model.addAttribute("lesson", lesson);
     model.addAttribute("ratingScale", ratingScale);
+    model.addAttribute("studentGoals", sg);
     return "lessons_checkout";
   }
 
@@ -93,17 +99,34 @@ public class LessonController {
       lessonRepo.save(lesson);
 
       redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
+      return "redirect:/lessons/"+lesson.getId()+"/checkout";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
+      return "redirect:/lessons/new";
     }
-
-    return "redirect:/lessons/"+lesson.getId()+"/checkout";
   }
 
-  @PostMapping("/lessons/{id}")
-  public String updateLesson(Lesson lesson, RedirectAttributes redirectAttributes) {
+  @PostMapping(value="/lessons/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  public String updateLesson(RedirectAttributes redirectAttributes, @PathVariable(value="id") int id,
+      @RequestBody MultiValueMap<String, String> formData) {
     try {
+      Lesson lesson = lessonRepo.findById(id);
       lesson.setTimeOut(LocalDateTime.now());
+      lesson.setNotes(formData.getFirst("notes"));
+
+      //TODO
+      formData.entrySet().forEach((entry) -> System.out.println(entry.getKey()+" "+entry.getValue()));
+
+      Set<Rating> ratings = lesson.getRatings();
+      for (int i=0; i < SparksApplication.MAX_GOALS_PER_STUDENT; i++) {
+        String goalId = formData.getFirst("rating"+i+"_goalId");
+        if (goalId != null && goalId.trim().length() > 0) {
+          int goalIdInt = Integer.parseInt(goalId);
+          int score = Integer.parseInt(formData.getFirst("rating"+i+"_score"));
+          ratings.add(new Rating(lesson.getId(), goalIdInt, score));
+        }
+      }
+      ratingRepo.saveAll(lesson.getRatings());
       lessonRepo.save(lesson);
 
       redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
@@ -111,6 +134,6 @@ public class LessonController {
       redirectAttributes.addAttribute("message", e.getMessage());
     }
 
-    return "redirect:/lessons/"+lesson.getId()+"/checkout";
+    return "redirect:/lessons/"+id+"/checkout";
   }
 }
