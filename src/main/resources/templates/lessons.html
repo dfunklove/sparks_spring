@@ -8,26 +8,26 @@
       <table class="table table-hover table-responsive-xl">
         <thead class="thead-light">
           <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Notes</th>
-            <th scope="col">School ID</th>
             <th scope="col">School Name</th>
-            <th scope="col">Student ID</th>
             <th scope="col">Student Name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Time Out</th>
+            <th scope="col">Minutes</th>
             <th scope="col">Rating</th>
             <th scope="col">Rating</th>
             <th scope="col">Rating</th>
+            <th scope="col">Notes</th>
           </tr>
         </thead>
         <tbody>
           <tr th:each="lesson : ${lessons}">
-            <th scope="row">[[${lesson.id}]]</th>
-            <td>[[${lesson.notes}]]</td>
-            <td>[[${lesson.school.id}]]</td>
             <td>[[${lesson.school.name}]]</td>
-            <td>[[${lesson.student.id}]]</td>
             <td>[[${lesson.student.firstName + " " + lesson.student.lastName}]]</td>
+            <td>[[${#temporals.format(lesson.timeIn, "MMM dd, yyyy")}]]</td>
+            <td>[[${#temporals.format(lesson.timeOut, "HH:mm a")}]]</td>
+            <td>[[${lesson.length()}]]</td>
             <td th:each="rating : ${lesson.ratings}">[[${rating.score}]]</td>
+            <td>[[${lesson.notes}]]</td>
           </tr>
         </tbody>
       </table>
