@@ -117,6 +117,7 @@ public class LessonController {
       //TODO
       formData.entrySet().forEach((entry) -> System.out.println(entry.getKey()+" "+entry.getValue()));
 
+      Set<Goal> newGoals = new HashSet<Goal>(0);
       Set<Rating> ratings = lesson.getRatings();
       for (int i=0; i < SparksApplication.MAX_GOALS_PER_STUDENT; i++) {
         String goalId = formData.getFirst("rating"+i+"_goalId");
@@ -124,8 +125,10 @@ public class LessonController {
           int goalIdInt = Integer.parseInt(goalId);
           int score = Integer.parseInt(formData.getFirst("rating"+i+"_score"));
           ratings.add(new Rating(lesson.getId(), goalIdInt, score));
+          newGoals.add(new Goal(goalIdInt));
         }
       }
+      lesson.getStudent().setGoals(newGoals);
       ratingRepo.saveAll(lesson.getRatings());
       lessonRepo.save(lesson);
 
