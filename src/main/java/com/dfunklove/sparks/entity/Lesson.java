@@ -1,5 +1,6 @@
 package com.dfunklove.sparks.entity;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -43,6 +44,13 @@ public class Lesson {
 
 	public Lesson(String notes) {
 		this.notes = notes;
+	}
+
+	public long length() {
+		if (timeOut == null) {
+			return (long) 0;
+		}
+		return timeIn.until(timeOut, ChronoUnit.MINUTES);
 	}
 
 	public String toString() {
