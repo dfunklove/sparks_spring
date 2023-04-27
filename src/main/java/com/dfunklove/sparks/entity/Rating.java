@@ -28,6 +28,12 @@ public class Rating {
 	public Rating(int id) {
 		this.id = id;
 	}
+
+	public Rating(int lessonId, int goalId, int score) {
+		this.lessonId = lessonId;
+		this.score = score;
+		this.goal = new Goal(goalId);
+	}
 	
 	public String toString() {
 		return String.format("Rating[id=%d, score=%s]", id, score);
