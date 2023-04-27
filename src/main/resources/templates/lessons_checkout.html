@@ -3,7 +3,7 @@
   layout:decorate="~{layout}">
 <body>
   <section layout:fragment="content">
-    <form th:action="@{|/lessons/${lesson.id}|}" method="post" enctype="multipart/form-data" th:object="${lesson}">
+    <form th:action="@{|/lessons/${lesson.id}|}" method="post" th:object="${lesson}">
       <h2>[[|${lesson.student.firstName} ${lesson.student.lastName} . Check Out|]]</h2>
       <!--p class="time-in">Lesson started at: [[${#temporals.format(lesson.timeIn)}]]</p-->
 <div class="lesson-fields" th:with="prefix=((${index} != null) ? 'student_'+${index}+'_' : '')">
@@ -15,7 +15,7 @@
     <label>Goals</label>
     <div class="lesson-field ratings">
     <div class="rating-list">
-      <div class="rating" th:each="sg : ${lesson.student.goals}">
+      <div class="rating" th:each="sg : ${studentGoals}">
         <select class="goal" th:name="|${prefix}rating${sgStat.index}_goalId|" onChange="checkFormErrors()">
           <option value="">[None]</option>
           <option th:value="${goal.id}" th:each="goal: ${goals}" th:selected="((${goal.id} == ${sg.id}) ? true : false)" th:text="${goal.name}"/>
@@ -30,7 +30,7 @@
     </div>
     <label>Notes</label>
     <span class="lesson-field notes">
-      <textarea name="|${prefix}notes|" rows="4"></textarea>
+      <textarea th:name="|${prefix}notes|" rows="4"></textarea>
     </span>
   </div>
       <button id="submit" type="submit">Finish Lesson</button>
