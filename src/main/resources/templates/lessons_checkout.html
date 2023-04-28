@@ -6,33 +6,7 @@
     <form th:action="@{|/lessons/${lesson.id}|}" method="post" th:object="${lesson}">
       <h2>[[|${lesson.student.firstName} ${lesson.student.lastName} . Check Out|]]</h2>
       <!--p class="time-in">Lesson started at: [[${#temporals.format(lesson.timeIn)}]]</p-->
-<div class="lesson-fields" th:with="prefix=((${index} != null) ? 'student_'+${index}+'_' : '')">
-    <input type="hidden" th:name="|${prefix}id|" th:value="${lesson.id}"></input>
-    <span class="lesson-field student-name">
-      <span class="student-first-name">[[${lesson.student.firstName}]]</span>
-      <span class="student-last-name">[[${lesson.student.lastName}]]</span>
-    </span>
-    <label>Goals</label>
-    <div class="lesson-field ratings">
-    <div class="rating-list">
-      <div class="rating" th:each="sg : ${studentGoals}">
-        <select class="goal" th:name="|${prefix}rating${sgStat.index}_goalId|" onChange="checkFormErrors()">
-          <option value="">[None]</option>
-          <option th:value="${goal.id}" th:each="goal: ${goals}" th:selected="((${goal.id} == ${sg.id}) ? true : false)" th:text="${goal.name}"/>
-        </select>
-        <select class="score" th:name="|${prefix}rating${sgStat.index}_score|" onChange="checkFormErrors()" th:attr="required=${((sg.id == 99) ? true : false)}">
-          <option value=""></option>
-          <option th:value="${val}" th:each="val: ${ratingScale}">[[${val}]]</option>
-        </select>
-        <span class="error"></span>
-      </div>
-    </div>
-    </div>
-    <label>Notes</label>
-    <span class="lesson-field notes">
-      <textarea th:name="|${prefix}notes|" rows="4"></textarea>
-    </span>
-  </div>
+      <div th:replace="~{fragments/lesson::input (null,${goals},${lesson},${ratingScale},${studentGoals})}"/>
       <button id="submit" type="submit">Finish Lesson</button>
     </form>
     <script>
