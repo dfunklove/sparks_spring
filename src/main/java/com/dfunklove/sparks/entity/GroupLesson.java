@@ -4,8 +4,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "group_lessons")
 public class GroupLesson {
   @Id
@@ -35,68 +39,12 @@ public class GroupLesson {
 	@Column(name="user_id", nullable = false)
 	private int userId;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getNotes() {
-		return notes;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-
-	public Set<Lesson> getLessons() {
-		return lessons;
-	}
-
-	public void setLessons(Set<Lesson> lessons) {
-		this.lessons = lessons;
-	}
-
-	public School getSchool() {
-		return school;
-	}
-
-	public void setSchool(School school) {
-		this.school = school;
-	}
-
-	public java.time.LocalDateTime getTimeIn() {
-		return timeIn;
-	}
-
-	public void setTimeIn(java.time.LocalDateTime timeIn) {
-		this.timeIn = timeIn;
-	}
-
-	public java.time.LocalDateTime getTimeOut() {
-		return timeOut;
-	}
-
-	public void setTimeOut(java.time.LocalDateTime timeOut) {
-		this.timeOut = timeOut;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
 	public GroupLesson() {}
 
 	public GroupLesson(int schoolId, java.time.LocalDateTime timeIn, int userId) {
-		setSchool(new School(schoolId));
-		setTimeIn(timeIn);
-		setUserId(userId);
+		this.school = new School(schoolId);
+		this.timeIn = timeIn;
+		this.userId = userId;
 	}
 
 	public long length() {
