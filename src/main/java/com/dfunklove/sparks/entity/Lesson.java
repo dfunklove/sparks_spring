@@ -42,8 +42,8 @@ public class Lesson {
 
 	public Lesson() {}
 
-	public Lesson(String notes) {
-		this.notes = notes;
+	public Lesson(int id) {
+		this.id = id;
 	}
 
 	public long length() {
