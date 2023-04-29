@@ -114,9 +114,6 @@ public class LessonController {
       lesson.setTimeOut(LocalDateTime.now());
       lesson.setNotes(formData.getFirst("notes"));
 
-      //TODO
-      formData.entrySet().forEach((entry) -> System.out.println(entry.getKey()+" "+entry.getValue()));
-
       Set<Goal> newGoals = new HashSet<Goal>(0);
       Set<Rating> ratings = lesson.getRatings();
       for (int i=0; i < SparksApplication.MAX_GOALS_PER_STUDENT; i++) {
