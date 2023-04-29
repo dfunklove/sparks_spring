@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
+<body>
+  <section layout:fragment="content">
+    <div th:if="${students != null && students.size() > 0}">
+      <h2>Start Group Lesson</h2>
+      <form id="group_lesson_form" th:action="@{/group_lessons}" method="post">
+        <input type="hidden" name="student_count" id="student_count" value="0"/>
+        <div class="table">
+          <div class="tr">
+            <div class="table">
+              <div class="thead">
+                <div class="tr">
+                  <span class="td">&nbsp;</span>
+                  <span class="td">F Name</span>
+                  <span class="td">L Name</span>
+                  <span class="td">School</span>
+                </div>
+              </div>
+              <div class="tr" th:each="student : ${students}">
+                <input type="hidden" th:name="|student_${studentStat.index}_id|" th:value="${student.id}" />
+                <input type="hidden" th:name="|student_${studentStat.index}_school_id|" th:value="${student.school.id}" />
+                <span class="td"><input type="checkbox" th:name="|student_${studentStat.index}_selected|" onclick="tally(event)"/></span>
+                <span class="td">[[${student.firstName}]]</span>
+                <span class="td">[[${student.lastName}]]</span>
+                <span class="td">[[${student.school.name}]]</span>
+              </div>
+            </div><!-- table -->
+          </div>
+          <div class="tr">
+            <span class="td" column-span="all"><button style="width: 100%" type="submit">Start Lesson</button>
+            <label for="submit" class="error"></label></span>
+          </div>
+        </div> <!-- table -->
+      </form><!-- form -->
+    </div>
+
+    <div th:unless="${students != null && students.size() > 0}">
+      <span>No students found!</span>
+    </div>
+
+    <script>
+      function beforeSubmit(event) {
+        const student_count = document.getElementById("student_count");
+        let val = parseInt(student_count.value);
+        if (val < 2) {
+          event.preventDefault()
+          const errorElement = document.querySelector("label[for='submit']")
+          if (errorElement) {
+            errorElement.innerHTML = "Please select 2 or more students"
+          }    
+        }
+      }
+
+      function tally(event) {
+        const student_count = document.getElementById("student_count");
+        let val = parseInt(student_count.value);
+        if (event.target.checked)
+          val++
+        else
+          val--
+          student_count.value = val.toString()
+      }    
+
+      const form = document.getElementById("group_lesson_form");
+      form.addEventListener("submit", beforeSubmit);
+    </script>
+  </section>
+</body>
+</html>

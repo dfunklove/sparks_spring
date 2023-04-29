@@ -23,6 +23,10 @@ public class Lesson {
 	@JoinColumn(name="lesson_id")
 	private Set<Rating> ratings; 
 
+	@ManyToOne(optional = true)
+	@JoinColumn(name="group_lesson_id")
+	private GroupLesson groupLesson;
+
 	@ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "school_id", nullable = false)
   private School school;
@@ -44,6 +48,14 @@ public class Lesson {
 
 	public Lesson(int id) {
 		this.id = id;
+	}
+
+	public Lesson(GroupLesson groupLesson, int schoolId, int studentId, java.time.LocalDateTime timeIn, int userId) {
+		this.groupLesson = groupLesson;
+		this.school = new School(schoolId);
+		this.student = new Student(studentId);
+		this.timeIn = timeIn;
+		this.userId = userId;
 	}
 
 	public long length() {
