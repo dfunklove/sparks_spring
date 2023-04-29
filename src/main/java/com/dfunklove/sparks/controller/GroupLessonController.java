@@ -2,8 +2,10 @@ package com.dfunklove.sparks.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,16 +64,20 @@ public class GroupLessonController {
   @GetMapping("/group_lessons/{id}/checkout")
   public String checkout(Model model, @PathVariable(value="id") int id) {
     GroupLesson groupLesson = groupLessonRepo.findById(id);
-    List<Goal> sg = new ArrayList<Goal>(); //groupLesson.getStudent().getGoals());
-    while (sg.size() < SparksApplication.MAX_GOALS_PER_STUDENT) {
-      sg.add(new Goal());
+    Map<Integer, List<Goal>> studentGoals = new HashMap<Integer, List<Goal>>(); //groupLesson.getStudent().getGoals());
+    for (Lesson lesson : groupLesson.getLessons()) {
+      List<Goal> sg = new ArrayList<Goal>(lesson.getStudent().getGoals());
+      while (sg.size() < SparksApplication.MAX_GOALS_PER_STUDENT) {
+        sg.add(new Goal());
+      }
+      studentGoals.put(lesson.getStudent().getId(), sg);
     }
     List<Goal> goals = goalRepo.findAll();
     int[] ratingScale = new int[]{10,9,8,7,6,5,4,3,2,1};
     model.addAttribute("goals", goals);
     model.addAttribute("groupLesson", groupLesson);
     model.addAttribute("ratingScale", ratingScale);
-    model.addAttribute("studentGoals", sg);
+    model.addAttribute("studentGoals", studentGoals);
     return "group_lessons_checkout";
   }
 
@@ -94,7 +100,7 @@ public class GroupLessonController {
 
       Set<Lesson> lessons = new HashSet<Lesson>(studentIds.length);
       for (int studentId : studentIds) {
-        lessons.add(new Lesson(null, schoolId, studentId, timeIn, 1));
+        lessons.add(new Lesson(groupLesson, schoolId, studentId, timeIn, 1));
       }  
       groupLesson.setLessons(lessons);
       groupLessonRepo.save(groupLesson);
