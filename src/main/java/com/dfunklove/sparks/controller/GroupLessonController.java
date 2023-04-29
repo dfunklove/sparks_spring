@@ -91,13 +91,13 @@ public class GroupLessonController {
       }
       java.time.LocalDateTime timeIn = java.time.LocalDateTime.now();
       GroupLesson groupLesson = new GroupLesson(schoolId, timeIn, 1);
-      groupLessonRepo.save(groupLesson);
 
       Set<Lesson> lessons = new HashSet<Lesson>(studentIds.length);
       for (int studentId : studentIds) {
-        lessons.add(new Lesson(groupLesson, schoolId, studentId, timeIn, 1));
+        lessons.add(new Lesson(null, schoolId, studentId, timeIn, 1));
       }  
-      lessonRepo.saveAll(lessons);
+      groupLesson.setLessons(lessons);
+      groupLessonRepo.save(groupLesson);
 
       redirectAttributes.addFlashAttribute("message", "The Group Lesson has been saved successfully!");
       return "redirect:/group_lessons/"+groupLesson.getId()+"/checkout";
