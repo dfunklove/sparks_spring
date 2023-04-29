@@ -4,12 +4,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.EqualsAndHashCode;
+import lombok.Data;
 
+@Data
 @Entity
-@Getter
-@Setter
 @Table(name = "lessons")
 public class Lesson {
 	@Id
@@ -22,10 +21,12 @@ public class Lesson {
 
 	@OneToMany
 	@JoinColumn(name="lesson_id")
+	@EqualsAndHashCode.Exclude
 	private Set<Rating> ratings; 
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name="group_lesson_id")
+	@EqualsAndHashCode.Exclude
 	private GroupLesson groupLesson;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -65,70 +66,4 @@ public class Lesson {
 		}
 		return timeIn.until(timeOut, ChronoUnit.MINUTES);
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result + ((school == null) ? 0 : school.hashCode());
-		result = prime * result + ((student == null) ? 0 : student.hashCode());
-		result = prime * result + ((timeIn == null) ? 0 : timeIn.hashCode());
-		result = prime * result + ((timeOut == null) ? 0 : timeOut.hashCode());
-		result = prime * result + userId;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Lesson other = (Lesson) obj;
-		if (id != other.id)
-			return false;
-		if (notes == null) {
-			if (other.notes != null)
-				return false;
-		} else if (!notes.equals(other.notes))
-			return false;
-		if (groupLesson == null) {
-			if (other.groupLesson != null)
-				return false;
-		} else if (!groupLesson.equals(other.groupLesson))
-			return false;
-		if (school == null) {
-			if (other.school != null)
-				return false;
-		} else if (!school.equals(other.school))
-			return false;
-		if (student == null) {
-			if (other.student != null)
-				return false;
-		} else if (!student.equals(other.student))
-			return false;
-		if (timeIn == null) {
-			if (other.timeIn != null)
-				return false;
-		} else if (!timeIn.equals(other.timeIn))
-			return false;
-		if (timeOut == null) {
-			if (other.timeOut != null)
-				return false;
-		} else if (!timeOut.equals(other.timeOut))
-			return false;
-		if (userId != other.userId)
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Lesson [id=" + id + ", notes=" + notes + ", school=" + school + ", student=" + student + ", timeIn="
-				+ timeIn + ", timeOut=" + timeOut + ", userId=" + userId + ", groupLessonId=" + (groupLesson != null ? groupLesson.getId() : 0) + "]";
-	}
-
 }
