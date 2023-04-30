@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -118,24 +119,36 @@ public class GroupLessonController {
       @RequestBody MultiValueMap<String, String> formData) {
     try {
       GroupLesson groupLesson = groupLessonRepo.findById(id);
-      groupLesson.setTimeOut(LocalDateTime.now());
+      java.time.LocalDateTime timeOut = LocalDateTime.now();
+      groupLesson.setTimeOut(timeOut);
       groupLesson.setNotes(formData.getFirst("notes"));
 
-      /*
-      Set<Goal> newGoals = new HashSet<Goal>(0);
-      Set<Rating> ratings = groupLesson.getRatings();
-      for (int i=0; i < SparksApplication.MAX_GOALS_PER_STUDENT; i++) {
-        String goalId = formData.getFirst("rating"+i+"_goalId");
-        if (goalId != null && goalId.trim().length() > 0) {
-          int goalIdInt = Integer.parseInt(goalId);
-          int score = Integer.parseInt(formData.getFirst("rating"+i+"_score"));
-          ratings.add(new Rating(groupLesson.getId(), goalIdInt, score));
-          newGoals.add(new Goal(goalIdInt));
-        }
+      Map<Integer, Lesson> lessons = new LinkedHashMap<Integer, Lesson>(groupLesson.getLessons().size());
+      for (Lesson lesson : groupLesson.getLessons()) {
+        lessons.put(lesson.getId(), lesson);
       }
-      groupLesson.getStudent().setGoals(newGoals);
-      ratingRepo.saveAll(groupLesson.getRatings());
-      */
+
+      int studentCount = Integer.parseInt(formData.getFirst("student_count"));
+      for (int s=0; s < studentCount; s++) {
+        String prefix = "student_"+s+"_";
+        int lessonId = Integer.parseInt(formData.getFirst(prefix+"id"));
+        Lesson lesson = lessons.get(lessonId);
+        Set<Goal> newGoals = new HashSet<Goal>(SparksApplication.MAX_GOALS_PER_STUDENT);
+        Set<Rating> ratings = new HashSet<Rating>(SparksApplication.MAX_GOALS_PER_STUDENT);
+        for (int r=0; r < SparksApplication.MAX_GOALS_PER_STUDENT; r++) {
+          String goalId = formData.getFirst(prefix+"rating"+r+"_goalId");
+          if (goalId != null && goalId.trim().length() > 0) {
+            int goalIdInt = Integer.parseInt(goalId);
+            int score = Integer.parseInt(formData.getFirst(prefix+"rating"+r+"_score"));
+            ratings.add(new Rating(lesson.getId(), goalIdInt, score));
+            newGoals.add(new Goal(goalIdInt));
+          }
+        }
+        lesson.setTimeOut(timeOut);
+        lesson.setNotes(formData.getFirst(prefix+"notes"));
+        lesson.getStudent().setGoals(newGoals);
+        ratingRepo.saveAll(ratings);
+      }
       groupLessonRepo.save(groupLesson);
 
       redirectAttributes.addFlashAttribute("message", "The GroupLesson has been saved successfully!");

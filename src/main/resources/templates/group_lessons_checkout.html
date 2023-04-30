@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout}">
+<body>
+  <section layout:fragment="content">
+    <form id="group_lesson_form" th:action="@{|/group_lessons/${groupLesson.id}|}" method="post" th:object="${groupLesson}">
+      <h2>Group Lesson Check Out</h2>
+      <p>
+        <span class="time-in">Lesson started at: [[${#temporals.format(groupLesson.timeIn)}]]</span>
+        <br/>
+        <span class="school">School: [[${groupLesson.school.name}]]</span>
+      </p>
+      <input type="hidden" name="student_count" th:value="${groupLesson.lessons.size()}" />
+      <div class="table responsive">
+        <div class="tr responsive">
+          <div class="table responsive">
+            <div class="thead responsive">
+              <div class="tr responsive">
+                <span class="td responsive">Name</span>
+                <span class="td responsive">Goals/Ratings</span>
+                <span class="td responsive">Student Notes</span>
+              </div>
+            </div>
+            <div th:each="lesson : ${groupLesson.lessons}" th:remove="tag">
+              <div th:replace="~{fragments/lesson::input (${lessonStat.index},${goals},${lesson},${ratingScale},${studentGoals.get(lesson.student.id)})}" />
+            </div>
+          </div>
+        </div>
+        <div class="tr responsive" style="text-align: center">
+          <span class="td responsive">
+            <div class="all-block">
+              <label for="notes">Group Notes</label>
+              <textarea id="notes" name="notes" style="width: 100%"></textarea>
+              <button style="width: 100%" type="submit">Finish Lesson</button>
+              <label for="submit" class="error"></label>
+            </div>
+          </span>
+        </div>
+      </div>
+    </form>
+    <script>
+      function checkFormErrors(event) {
+        var error = false;
+        const goals = document.querySelectorAll(".goal");
+        for (let i=0; i<goals.length; i++) {
+          const scoreElement = goals[i].parentElement?.querySelector(".score");
+          if ((goals[i]).value && !scoreElement.value) {
+            scoreElement.required = true;
+            error = true;
+          } else {
+            scoreElement.required = false;
+          }
+        }
+        if (error) {
+          event.preventDefault();
+        }
+        const errorElement = document.querySelector("label[for='submit']")
+        if (errorElement) {
+          if (error)
+            errorElement.innerHTML = "Please correct the errors to continue"
+          else
+            errorElement.innerHTML = ""
+        }
+      }
+      const form = document.getElementById("group_lesson_form");
+      form.addEventListener("submit", checkFormErrors);
+    </script>
+  </section>
+</body>
+</html>
