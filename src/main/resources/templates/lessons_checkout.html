@@ -3,11 +3,12 @@
   layout:decorate="~{layout}">
 <body>
   <section layout:fragment="content">
-    <form th:action="@{|/lessons/${lesson.id}|}" method="post" th:object="${lesson}">
+    <form id="lesson_form" th:action="@{|/lessons/${lesson.id}|}" method="post" th:object="${lesson}">
       <h2>[[|${lesson.student.firstName} ${lesson.student.lastName} . Check Out|]]</h2>
       <!--p class="time-in">Lesson started at: [[${#temporals.format(lesson.timeIn)}]]</p-->
       <div th:replace="~{fragments/lesson::input (null,${goals},${lesson},${ratingScale},${studentGoals})}"/>
       <button id="submit" type="submit">Finish Lesson</button>
+      <div style="text-align: center"><label for="submit" class="error"></label></div>
     </form>
     <script>
       function checkFormErrors() {
@@ -23,6 +24,9 @@
             scoreElement.required = false;
           }
         }
+        if (error) {
+          event.preventDefault();
+        }
         const errorElement = document.querySelector("label[for='submit']")
         if (errorElement) {
           if (error)
@@ -30,8 +34,9 @@
           else
             errorElement.innerHTML = ""
         }
-        return error;
       }
+      const form = document.getElementById("lesson_form");
+      form.addEventListener("submit", checkFormErrors);
     </script>
   </section>
 </body>
