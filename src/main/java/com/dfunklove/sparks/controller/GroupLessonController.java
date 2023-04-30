@@ -106,7 +106,7 @@ public class GroupLessonController {
       groupLesson.setLessons(lessons);
       groupLessonRepo.save(groupLesson);
 
-      redirectAttributes.addFlashAttribute("message", "The Group Lesson has been saved successfully!");
+      //redirectAttributes.addFlashAttribute("message", "The Group Lesson has been saved successfully!");
       return "redirect:/group_lessons/"+groupLesson.getId()+"/checkout";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
@@ -151,7 +151,7 @@ public class GroupLessonController {
       }
       groupLessonRepo.save(groupLesson);
 
-      redirectAttributes.addFlashAttribute("message", "The GroupLesson has been saved successfully!");
+      //redirectAttributes.addFlashAttribute("message", "The GroupLesson has been saved successfully!");
       return "redirect:/group_lessons/new";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());

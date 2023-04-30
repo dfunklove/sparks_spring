@@ -97,7 +97,7 @@ public class LessonController {
       lesson.setTimeIn(LocalDateTime.now());
       lessonRepo.save(lesson);
 
-      redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
+      //redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
       return "redirect:/lessons/"+lesson.getId()+"/checkout";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
@@ -128,7 +128,7 @@ public class LessonController {
       ratingRepo.saveAll(lesson.getRatings());
       lessonRepo.save(lesson);
 
-      redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
+      //redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
       return "redirect:/lessons/new";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
