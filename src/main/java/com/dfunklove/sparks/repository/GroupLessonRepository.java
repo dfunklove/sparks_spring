@@ -9,5 +9,7 @@ public interface GroupLessonRepository extends CrudRepository<GroupLesson, Long>
 
   List<GroupLesson> findAll();
 
+  List<GroupLesson> findAllByOrderByTimeOutDesc();
+
   GroupLesson findById(long id);
 }

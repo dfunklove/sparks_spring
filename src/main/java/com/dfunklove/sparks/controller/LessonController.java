@@ -20,11 +20,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dfunklove.sparks.SparksApplication;
 import com.dfunklove.sparks.entity.Goal;
+import com.dfunklove.sparks.entity.GroupLesson;
 import com.dfunklove.sparks.entity.Lesson;
 import com.dfunklove.sparks.entity.Rating;
 import com.dfunklove.sparks.entity.School;
 import com.dfunklove.sparks.entity.Student;
 import com.dfunklove.sparks.repository.GoalRepository;
+import com.dfunklove.sparks.repository.GroupLessonRepository;
 import com.dfunklove.sparks.repository.LessonRepository;
 import com.dfunklove.sparks.repository.RatingRepository;
 import com.dfunklove.sparks.repository.StudentRepository;
@@ -34,6 +36,8 @@ public class LessonController {
 
   @Autowired
   private GoalRepository goalRepo;
+  @Autowired
+  private GroupLessonRepository groupLessonRepo;
   @Autowired
   private LessonRepository lessonRepo;
   @Autowired
@@ -45,8 +49,9 @@ public class LessonController {
   public String getAll(Model model) {
 
     try {
-      List<Lesson> lessons = new ArrayList<Lesson>();
-      lessonRepo.findAll().forEach(lessons::add);
+      List lessons = new ArrayList();
+      groupLessonRepo.findAllByOrderByTimeOutDesc().forEach(lessons::add);
+      lessonRepo.findByGroupLessonIdIsNullOrderByTimeOutDesc().forEach(lessons::add);
       model.addAttribute("lessons", lessons);
     } catch (Exception e) {
       model.addAttribute("message", e.getMessage());
