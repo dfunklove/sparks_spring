@@ -5,6 +5,7 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Data;
 
 @Data
@@ -27,6 +28,7 @@ public class Lesson {
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name="group_lesson_id")
 	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private GroupLesson groupLesson;
 
 	@ManyToOne(fetch = FetchType.LAZY)

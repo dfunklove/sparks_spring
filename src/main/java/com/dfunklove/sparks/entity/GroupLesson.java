@@ -6,6 +6,7 @@ import java.util.Set;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -24,6 +25,7 @@ public class GroupLesson {
 		cascade = CascadeType.ALL,
 		orphanRemoval = true)
 	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	private Set<Lesson> lessons;
 
 	@ManyToOne(fetch = FetchType.LAZY)
