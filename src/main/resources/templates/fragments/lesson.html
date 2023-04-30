@@ -1,3 +1,21 @@
+<div class="tr" th:fragment="display (lesson)">
+  <span class="td">[[${lesson.school.name}]]</span>
+  <span class="td">[[${lesson.student.firstName + " " + lesson.student.lastName}]]</span>
+  <span class="td">[[${#temporals.format(lesson.timeIn, "MMM dd, yyyy")}]]</span>
+  <span class="td">[[${#temporals.format(lesson.timeOut, "HH:mm a")}]]</span>
+  <span class="td">[[${lesson.length()}]]</span>
+  <span class="td">
+    <details>
+      <summary>Goals</summary>
+      <span th:each="rating : ${lesson.ratings}" th:remove="tag">
+        <span class="td">[[${rating.goal.name}]]</span>
+        <span class="td">[[${rating.score}]]</span>
+      </span>
+    </details>
+  </span>
+  <span class="td">[[${lesson.notes}]]</span>
+</div>
+
 <div th:fragment="input (index,goals,lesson,ratingScale,studentGoals)" class="lesson-fields" th:with="prefix=((${index} != null) ? 'student_'+${index}+'_' : '')">
   <input type="hidden" th:name="|${prefix}id|" th:value="${lesson.id}"></input>
   <span class="lesson-field student-name">
