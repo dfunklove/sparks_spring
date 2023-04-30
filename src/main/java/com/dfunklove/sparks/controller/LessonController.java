@@ -129,10 +129,10 @@ public class LessonController {
       lessonRepo.save(lesson);
 
       redirectAttributes.addFlashAttribute("message", "The Lesson has been saved successfully!");
+      return "redirect:/lessons/new";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
+      return "redirect:/lessons/"+id+"/checkout";
     }
-
-    return "redirect:/lessons/"+id+"/checkout";
   }
 }

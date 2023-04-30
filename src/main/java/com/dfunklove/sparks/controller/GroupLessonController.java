@@ -152,10 +152,10 @@ public class GroupLessonController {
       groupLessonRepo.save(groupLesson);
 
       redirectAttributes.addFlashAttribute("message", "The GroupLesson has been saved successfully!");
+      return "redirect:/group_lessons/new";
     } catch (Exception e) {
       redirectAttributes.addAttribute("message", e.getMessage());
+      return "redirect:/group_lessons/"+id+"/checkout";
     }
-
-    return "redirect:/group_lessons/"+id+"/checkout";
   }
 }
