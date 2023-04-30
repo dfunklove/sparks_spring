@@ -1,0 +1,18 @@
+<div class="tr" th:fragment="display (group_lesson)" th:remove="tag">
+  <div class="tr">
+    <span class="td no-border-left">
+      <button th:id="|max_button_${group_lesson.id}|" class="minimize" th:onclick="|toggleShowGroupLesson(${group_lesson.id})|">+</button>
+      <button th:class="|minimize hidden group_lesson_${group_lesson.id}|" th:onclick="|toggleShowGroupLesson(${group_lesson.id})|">-</button>
+    </span>
+    <span class="td">[[(${group_lesson.lessons.size} > 0 ? ${group_lesson.lessons[0].school.name} : '')]]</span>
+    <span class="td">Group Lesson</span>
+    <span class="td">[[${#temporals.format(group_lesson.timeIn, "MMM dd, yyyy")}]]</span>
+    <span class="td">[[${#temporals.format(group_lesson.timeOut, "hh:mm a")}]]</span>
+    <span class="td">[[${group_lesson.length()}]]</span>
+    <span class="td"></span>
+    <span class="td">[[${group_lesson.notes}]]</span>
+  </div>
+  <div th:each="lesson : ${group_lesson.lessons}" th:remove="tag">
+    <div th:replace="~{fragments/lesson::display (${lesson})}" />
+  </div>
+</div>

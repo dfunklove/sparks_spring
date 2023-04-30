@@ -3,11 +3,12 @@
   layout:decorate="~{layout}">
 <body>
   <section layout:fragment="content">
-    <h2>Lessons</h2>
+    <h2>My Lessons</h2>
   <div th:if="${lessons != null && lessons.size() > 0}">
       <div class="stdnt table">
         <div class="thead">
           <div class="tr">
+            <span class="td no-border-left"></span>
             <span class="td">School</span>
             <span class="td">Student</span>
             <span class="td">Date</span>
@@ -18,7 +19,7 @@
           </div>
         </div>
         <div th:each="lesson : ${lessons}" th:remove="tag">
-          <div th:replace="~{fragments/lesson::display (${lesson})}" />
+          <div th:replace="(${lesson.class.name == 'com.dfunklove.sparks.entity.GroupLesson'} ? ~{fragments/group_lesson::display (${lesson})} : ~{fragments/lesson::display (${lesson})})" />
         </div>
       </div>
     </div>
@@ -26,6 +27,14 @@
     <div class="" th:unless="${lessons != null && lessons.size() > 0}">
       <span>No lessons found!</span>
     </div>
+
+    <script>
+      function toggleShowGroupLesson(group_lesson_id) {
+        for (e of document.getElementsByClassName("group_lesson_"+group_lesson_id))
+          e.classList.toggle("hidden");
+        document.getElementById("max_button_"+group_lesson_id).classList.toggle("hidden");
+      }
+    </script>
   </section>
 </body>
 

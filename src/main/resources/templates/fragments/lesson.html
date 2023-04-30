@@ -1,8 +1,9 @@
-<div class="tr" th:fragment="display (lesson)">
+<div th:class="(${lesson.groupLesson} != null ? 'hidden group_lesson_'+${lesson.groupLesson.id}+' ' : '')+tr" th:fragment="display (lesson)">
+  <span class="td no-border-left"></span>
   <span class="td">[[${lesson.school.name}]]</span>
   <span class="td">[[${lesson.student.firstName + " " + lesson.student.lastName}]]</span>
   <span class="td">[[${#temporals.format(lesson.timeIn, "MMM dd, yyyy")}]]</span>
-  <span class="td">[[${#temporals.format(lesson.timeOut, "HH:mm a")}]]</span>
+  <span class="td">[[${#temporals.format(lesson.timeOut, "hh:mm a")}]]</span>
   <span class="td">[[${lesson.length()}]]</span>
   <span class="td">
     <details>
