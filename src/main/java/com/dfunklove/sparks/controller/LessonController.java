@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dfunklove.sparks.SparksApplication;
 import com.dfunklove.sparks.entity.Goal;
-import com.dfunklove.sparks.entity.GroupLesson;
 import com.dfunklove.sparks.entity.Lesson;
 import com.dfunklove.sparks.entity.Rating;
 import com.dfunklove.sparks.entity.School;
@@ -61,20 +60,18 @@ public class LessonController {
   }
 
   @GetMapping("/lessons/new")
-  public String addLesson(Model model) {
-    Lesson lesson = new Lesson();
-
-    model.addAttribute("lesson", lesson);
-
-    try {
+  public String addLesson(Model model, RedirectAttributes redirectAttributes) {
+    String url = SparksApplication.handleOpenLesson(groupLessonRepo, lessonRepo);
+    if (url != null) {
+      redirectAttributes.addFlashAttribute("message", "Please finish open lesson before starting a new one");
+      return url;
+    } else {
       List<Student> students = new ArrayList<Student>();
       studentRepo.findAll().forEach(students::add);
       model.addAttribute("students", students);
-    } catch (Exception e) {
-      model.addAttribute("message", e.getMessage());
+      model.addAttribute("lesson", new Lesson());
+      return "lessons_new";
     }
-
-    return "lessons_new";
   }
 
   @GetMapping("/lessons/{id}/checkout")

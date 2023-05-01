@@ -50,16 +50,17 @@ public class GroupLessonController {
   private StudentRepository studentRepo;
 
   @GetMapping("/group_lessons/new")
-  public String addGroupLesson(Model model) {
-    try {
+  public String addGroupLesson(Model model, RedirectAttributes redirectAttributes) {
+    String url = SparksApplication.handleOpenLesson(groupLessonRepo, lessonRepo);
+    if (url != null) {
+      redirectAttributes.addFlashAttribute("message", "Please finish open lesson before starting a new one");
+      return url;
+    } else {
       List<Student> students = new ArrayList<Student>();
-      studentRepo.findAll().forEach(students::add);
       model.addAttribute("students", students);
-    } catch (Exception e) {
-      model.addAttribute("message", e.getMessage());
+      studentRepo.findAll().forEach(students::add);
+      return "group_lessons_new";
     }
-
-    return "group_lessons_new";
   }
 
   @GetMapping("/group_lessons/{id}/checkout")

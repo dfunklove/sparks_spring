@@ -7,9 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface LessonRepository extends CrudRepository<Lesson, Long> {
 
-  List<Lesson> findAll();
-
   List<Lesson> findByGroupLessonIdIsNullOrderByTimeOutDesc();
 
   Lesson findById(long id);
+
+  Lesson findFirstByGroupLessonIdIsNullAndTimeOutIsNull();
 }

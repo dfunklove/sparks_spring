@@ -12,4 +12,6 @@ public interface GroupLessonRepository extends CrudRepository<GroupLesson, Long>
   List<GroupLesson> findAllByOrderByTimeOutDesc();
 
   GroupLesson findById(long id);
+
+  GroupLesson findFirstByTimeOutIsNull();
 }
