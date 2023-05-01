@@ -17,7 +17,7 @@
     </nav>
     <main id="detail" class="container">
       <p th:if="${message != null}">
-        Error: [[${message}]]
+        <mark>[[${message}]]</mark>
       </p>
       <section layout:fragment="content">
         <p>Page content goes here</p>
