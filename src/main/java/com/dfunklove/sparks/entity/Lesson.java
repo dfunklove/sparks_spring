@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "lessons")
-public class Lesson {
+public class Lesson implements Comparable {
 	@Id
 	@GeneratedValue(generator = "lesson_generator")
 	@SequenceGenerator(name="lesson_generator", sequenceName = "lessons_id_seq", allocationSize = 1)
@@ -60,6 +60,25 @@ public class Lesson {
 		this.student = new Student(studentId);
 		this.timeIn = timeIn;
 		this.userId = userId;
+	}
+
+	@Override
+	public int compareTo(Object obj) {
+		if (obj instanceof Lesson) {
+			Lesson lesson = (Lesson) obj;
+			if (timeOut != null && lesson.getTimeOut() != null)
+				return timeOut.compareTo(lesson.getTimeOut());
+			else
+				return timeIn.compareTo(lesson.getTimeIn());
+		} else if (obj instanceof GroupLesson) {
+			GroupLesson lesson = (GroupLesson) obj;
+			if (timeOut != null && lesson.getTimeOut() != null)
+				return timeOut.compareTo(lesson.getTimeOut());
+			else
+				return timeIn.compareTo(lesson.getTimeIn());
+		} else {
+			return 0;
+		}
 	}
 
 	public long length() {

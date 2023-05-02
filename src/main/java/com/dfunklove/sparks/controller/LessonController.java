@@ -2,6 +2,8 @@ package com.dfunklove.sparks.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +53,8 @@ public class LessonController {
       List lessons = new ArrayList();
       groupLessonRepo.findAllByOrderByTimeOutDesc().forEach(lessons::add);
       lessonRepo.findByGroupLessonIdIsNullOrderByTimeOutDesc().forEach(lessons::add);
+      Collections.sort(lessons);
+      Collections.reverse(lessons);
       model.addAttribute("lessons", lessons);
     } catch (Exception e) {
       model.addAttribute("message", e.getMessage());
@@ -59,7 +63,7 @@ public class LessonController {
     return "lessons";
   }
 
-  @GetMapping("/lessons/new")
+  @GetMapping(value={"/", "/lessons/new"})
   public String addLesson(Model model, RedirectAttributes redirectAttributes) {
     String url = SparksApplication.handleOpenLesson(groupLessonRepo, lessonRepo);
     if (url != null) {
